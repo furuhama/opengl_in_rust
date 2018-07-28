@@ -1,7 +1,11 @@
 extern crate sdl2;
 extern crate gl;
 
+pub mod render_gl;
+
 fn main() {
+    use std::ffi::CString;
+
     let sdl = sdl2::init().unwrap();
     let video_subsystem = sdl.video().unwrap();
     let window = video_subsystem
@@ -24,6 +28,18 @@ fn main() {
     }
 
     let mut event_pump = sdl.event_pump().unwrap();
+
+    let vert_shader = render_gl::Shader::from_vert_source(
+        &CString::new(include_str!("triangle.vert")).unwrap()
+    ).unwrap();
+    let frag_shader = render_gl::Shader::from_frag_source(
+        &CString::new(include_str!("triangle.frag")).unwrap()
+    ).unwrap();
+    let shader_program = render_gl::Program::from_shaders(
+        &[vert_shader, frag_shader]
+    ).unwrap();
+    shader_program.set_used();
+
     'main: loop {
         for event in event_pump.poll_iter() {
             match event {
