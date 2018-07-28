@@ -5,3 +5,4 @@ authors = ["furuhama <furuhama@users.noreply.github.com>"]
 
 [dependencies]
 sdl2 = "*"
+gl = "*"
